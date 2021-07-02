@@ -26,4 +26,22 @@ const fetchMyIP = function(apiurl,callback) {
 
 };
 
-module.exports = { fetchMyIP };
+const fetchCoordsByIP = function(ipv4,callback){
+  const freeGeo = `https://freegeoip.app/json/${ipv4}`;
+  const coords = {};
+
+  request(freeGeo, (error,response,body) => {
+    if (!error && response.statusCode === 200) {
+      const data = JSON.parse(body);
+      console.log("TESTING ",data);
+      coords["latitude"] = data.latitude;
+      coords["longitude"] = data.longitude;
+      callback(error, coords);
+    }
+    if(error && response.statusCode !== 200){
+      callback(error, null);
+    }
+  });
+};
+
+module.exports = { fetchCoordsByIP,fetchMyIP };
